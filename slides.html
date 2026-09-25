@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Presentation: Building Your First Developer Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0f172a;
+      --bg-card: #1e293b;
+      --bg-card-border: #334155;
+      --primary: #6366f1;
+      --primary-glow: #818cf8;
+      --accent: #c084fc;
+      --text-bright: #f8fafc;
+      --text-muted: #94a3b8;
+      --success: #34d399;
+      --warning: #fbbf24;
+      --font-main: 'Inter', system-ui, sans-serif;
+      --font-code: 'Fira Code', monospace;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-main);
+      background-color: var(--bg-dark);
+      color: var(--text-bright);
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* TOP PRESENTATION BAR */
+    .pres-header {
+      padding: 0.75rem 1.5rem;
+      background-color: rgba(15, 23, 42, 0.95);
+      border-bottom: 1px solid var(--bg-card-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10;
+    }
+
+    .pres-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .pres-title span {
+      color: var(--primary-glow);
+    }
+
+    .pres-controls {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .btn-ctrl {
+      background-color: var(--bg-card);
+      border: 1px solid var(--bg-card-border);
+      color: var(--text-bright);
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-ctrl:hover {
+      background-color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .slide-counter {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      padding: 0 0.5rem;
+    }
+
+    /* PROGRESS BAR */
+    .progress-container {
+      height: 4px;
+      background-color: var(--bg-card);
+      width: 100%;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      width: 10%;
+      transition: width 0.3s ease;
+    }
+
+    /* SLIDE STAGE */
+    .slide-stage {
+      flex: 1;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+    }
+
+    .slide {
+      position: absolute;
+      width: 100%;
+      max-width: 1050px;
+      height: 85%;
+      background-color: var(--bg-card);
+      border: 1px solid var(--bg-card-border);
+      border-radius: 16px;
+      padding: 3rem 4rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      opacity: 0;
+      visibility: hidden;
+      transform: scale(0.96) translateY(10px);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1) translateY(0);
+    }
+
+    /* SLIDE CONTENT STYLES */
+    .slide-badge {
+      display: inline-block;
+      align-self: flex-start;
+      background-color: rgba(99, 102, 241, 0.15);
+      color: var(--primary-glow);
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 0.3rem 0.8rem;
+      border-radius: 50px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      margin-bottom: 1rem;
+    }
+
+    .slide-title {
+      font-size: 2.2rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+    }
+
+    .gradient-text {
+      background: linear-gradient(90deg, #818cf8, #c084fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .slide-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+
+    .grid-4 .card {
+      padding: 1.2rem 1.35rem;
+    }
+
+    .grid-4 .card h3 {
+      font-size: 1.05rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .grid-4 .card p {
+      font-size: 0.88rem;
+      line-height: 1.45;
+    }
+
+    .grid-5 {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 1.25rem;
+    }
+
+    .grid-5 .card:nth-child(1),
+    .grid-5 .card:nth-child(2),
+    .grid-5 .card:nth-child(3) {
+      grid-column: span 2;
+    }
+
+    .grid-5 .card:nth-child(4),
+    .grid-5 .card:nth-child(5) {
+      grid-column: span 3;
+    }
+
+    .grid-5 .card {
+      padding: 1.2rem 1.3rem;
+    }
+
+    .grid-5 .card h3 {
+      font-size: 1.05rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .grid-5 .card p {
+      font-size: 0.88rem;
+      line-height: 1.45;
+    }
+
+    .card {
+      background-color: var(--bg-dark);
+      border: 1px solid var(--bg-card-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+
+    .card h3 {
+      font-size: 1.15rem;
+      color: var(--primary-glow);
+      margin-bottom: 0.5rem;
+    }
+
+    .card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .bullet-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .bullet-list li {
+      font-size: 1.1rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      color: var(--text-bright);
+    }
+
+    .bullet-icon {
+      background-color: rgba(99, 102, 241, 0.2);
+      color: var(--primary-glow);
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+
+    .code-block {
+      background-color: #090d16;
+      border: 1px solid var(--bg-card-border);
+      border-radius: 8px;
+      padding: 1.25rem;
+      font-family: var(--font-code);
+      font-size: 0.9rem;
+      color: #e2e8f0;
+      overflow-x: auto;
+      line-height: 1.6;
+    }
+
+    .code-kw {
+      color: #c084fc;
+    }
+
+    .code-tag {
+      color: #818cf8;
+    }
+
+    .code-attr {
+      color: #34d399;
+    }
+
+    .code-str {
+      color: #fbbf24;
+    }
+
+    /* FOOTER OF SLIDE */
+    .slide-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    /* TITLE SLIDE SPECIFIC */
+    .slide-title-hero {
+      text-align: center;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .slide-title-hero h1 {
+      font-size: 3.2rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+    }
+
+    .slide-title-hero p {
+      font-size: 1.3rem;
+      color: var(--text-muted);
+      max-width: 700px;
+      margin: 0 auto 2rem;
+    }
+
+    .presenter-box {
+      background-color: var(--bg-dark);
+      border: 1px solid var(--bg-card-border);
+      padding: 0.75rem 1.5rem;
+      border-radius: 50px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--primary-glow);
+    }
+
+    /* SPEAKER NOTES DRAWER */
+    .notes-panel {
+      background-color: #0b1120;
+      border-top: 1px solid var(--bg-card-border);
+      padding: 1rem 1.5rem;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .notes-label {
+      background-color: var(--warning);
+      color: #000;
+      font-weight: 700;
+      font-size: 0.75rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+
+    /* KEYBOARD HINT */
+    .key-hint {
+      display: inline-block;
+      background: var(--bg-card-border);
+      color: var(--text-bright);
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-family: var(--font-code);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- TOP BAR -->
+  <header class="pres-header">
+    <div class="pres-title">
+      <span>🖥️ PRESENTATION</span> | Building Your First Developer Portfolio
+    </div>
+    <div class="pres-controls">
+      <button class="btn-ctrl" id="prevBtn">← Prev</button>
+      <span class="slide-counter" id="slideNum">Slide 1 / 11</span>
+      <button class="btn-ctrl" id="nextBtn">Next →</button>
+      <button class="btn-ctrl" id="fullscreenBtn">⛶ Fullscreen</button>
+    </div>
+  </header>
+
+  <!-- PROGRESS BAR -->
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <!-- STAGE FOR SLIDES -->
+  <main class="slide-stage">
+
+    <!-- SLIDE 1: TITLE -->
+    <section class="slide active">
+      <div class="slide-body slide-title-hero">
+        <span class="slide-badge">Speaker Presentation Deck</span>
+        <h1>Building Your First <span class="gradient-text">Developer Portfolio</span></h1>
+        <p>A Beginner's Guide to Structure, Code & Getting Noticed</p>
+        <div class="presenter-box">Presented by: John Carlo Ayangco</div>
+      </div>
+      <div class="slide-footer">
+        <span>Portfolio Making Talk 2026</span>
+        <span>Use <span class="key-hint">←</span> <span class="key-hint">→</span> or Spacebar to navigate</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 2: WHY A PORTFOLIO MATTERS -->
+    <section class="slide">
+      <div>
+        <span class="slide-badge">Module 1: The Goal</span>
+        <h2 class="slide-title">Why a Developer <span class="gradient-text">Portfolio Matters</span></h2>
+      </div>
+      <div class="slide-body">
+        <div class="grid-4">
+          <div class="card">
+            <h3>🎯 Proof of Competence over Claims</h3>
+            <p>Anyone can write "proficient in Python" or "expert in digital marketing" on a résumé. A portfolio shows
+              the actual codebase, live application, or campaign metrics, removing guesswork for hiring managers.</p>
+          </div>
+          <div class="card">
+            <h3>🧩 Demonstrates Problem-Solving & Process</h3>
+            <p>Beyond finished products, a strong portfolio includes case studies detailing the context, challenges,
+              choices made, and ultimate business impact. This reveals how you think and overcome obstacles.</p>
+          </div>
+          <div class="card">
+            <h3>✨ Establishes Personal Brand & Style</h3>
+            <p>A portfolio gives you complete control over your professional narrative. It showcases your design
+              sensibility, writing tone, or development methodology in a way a standardized résumé cannot.</p>
+          </div>
+          <div class="card">
+            <h3>🚀 Provides Leverage in Career Progression</h3>
+            <p>Having a visible, high-quality portfolio gives you upper-hand leverage when negotiating salary, pitching
+              high-value clients as a freelancer, or pushing for a promotion.</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Slide 2 / 11</span>
+        <span>"Show, Don't Just Tell"</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 3: THE 5 CORE BLOCKS -->
+    <section class="slide">
+      <div>
+        <span class="slide-badge">Module 2: Structure</span>
+        <h2 class="slide-title">The 5 Essential <span class="gradient-text">Building Blocks</span></h2>
+      </div>
+      <div class="slide-body">
+        <div class="grid-5">
+          <div class="card">
+            <h3>1. Hero Section 👋</h3>
+            <p>5-second impression: Who you are, your role, avatar, and primary action buttons (View Work / Contact).
+            </p>
+          </div>
+          <div class="card">
+            <h3>2. About & Skills 🛠️</h3>
+            <p>Short personal bio + concise badges of tools you actually use (HTML, CSS, JS, Git).</p>
+          </div>
+          <div class="card">
+            <h3>3. Featured Projects 💻</h3>
+            <p>2–3 quality projects with titles, tech tags, descriptions, and direct links to Live Demo & GitHub code.
+            </p>
+          </div>
+          <div class="card">
+            <h3>4. Certificates & Badges 📜</h3>
+            <p>Verified proof of skills: Course credentials and certifications proving structured learning.</p>
+          </div>
+          <div class="card">
+            <h3>5. Contact & Socials 📬</h3>
+            <p>Low-friction ways to get in touch: Email address, GitHub, LinkedIn, and social badges.</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Slide 3 / 11</span>
+        <span>Keep it concise & structured</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 4: WHAT MAKES A GOOD DEMO PROJECT -->
+    <section class="slide">
+      <div>
+        <span class="slide-badge">Module 3: Content</span>
+        <h2 class="slide-title">Selecting <span class="gradient-text">Featured Projects</span></h2>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="card">
+            <h3>⭐ Quality over Quantity</h3>
+            <p>2 well-crafted projects beat 10 unfinished tutorial clones. Make every project count.</p>
+          </div>
+          <div class="card">
+            <h3>🔍 Clear Documentation</h3>
+            <p>Every project needs a working live link and a clean GitHub respository.</p>
+          </div>
+          <div class="card">
+            <h3>💡 Solves a Problem</h3>
+            <p>Show practical utility: a personal blog, a task manager, or a responsive product landing page.</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Slide 4 / 11</span>
+        <span>Focus on real, working projects</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 5: CLEAN HTML ARCHITECTURE -->
+    <section class="slide">
+      <div>
+        <span class="slide-badge">Module 4: Code</span>
+        <h2 class="slide-title">Clean <span class="gradient-text">Semantic HTML5</span></h2>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div>
+            <ul class="bullet-list">
+              <li>
+                <div class="bullet-icon">1</div> Use <code>&lt;header&gt;</code> & <code>&lt;nav&gt;</code> for
+                navigation.
+              </li>
+              <li>
+                <div class="bullet-icon">2</div> Wrap content in <code>&lt;main&gt;</code> and
+                <code>&lt;section&gt;</code> tags.
+              </li>
+              <li>
+                <div class="bullet-icon">3</div> Use <code>&lt;article&gt;</code> for project cards.
+              </li>
+              <li>
+                <div class="bullet-icon">4</div> Use alternative tags for images to make it accessible
+              </li>
+              <li>
+                <div class="bullet-icon">5</div> Zero build steps needed, pure plain HTML!
+              </li>
+            </ul>
+          </div>
+          <div class="code-block">
+            <span class="code-tag">&lt;header</span> <span class="code-attr">class</span>=<span
+              class="code-str">"hero"</span><span class="code-tag">&gt;</span><br>
+            &nbsp;&nbsp;<span class="code-tag">&lt;h1&gt;</span>Hi, I'm John Carlo<span
+              class="code-tag">&lt;/h1&gt;</span><br>
+            &nbsp;&nbsp;<span class="code-tag">&lt;p&gt;</span>Web Developer<span class="code-tag">&lt;/p&gt;</span><br>
+            <span class="code-tag">&lt;/header&gt;</span><br><br>
+            <span class="code-tag">&lt;section</span> <span class="code-attr">id</span>=<span
+              class="code-str">"projects"</span><span class="code-tag">&gt;</span><br>
+            &nbsp;&nbsp;<span class="code-tag">&lt;article</span> <span class="code-attr">class</span>=<span
+              class="code-str">"project-card"</span><span class="code-tag">&gt;</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-tag">&lt;h3&gt;</span>Blog App<span
+              class="code-tag">&lt;/h3&gt;</span><br>
+            &nbsp;&nbsp;<span class="code-tag">&lt;/article&gt;</span><br>
+            <span class="code-tag">&lt;/section&gt;</span>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Slide 5 / 11</span>
+        <span>Semantic HTML = Accessible & SEO friendly</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 6: CSS STYLING SUPERPOWERS -->
+    <section class="slide">
+      <div>
+        <span class="slide-badge">Module 5: Styling</span>
+        <h2 class="slide-title">Modern <span class="gradient-text">CSS Layouts</span></h2>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="code-block">
+            <span class="code-kw">:root</span> {<br>
+            &nbsp;&nbsp;<span class="code-attr">--bg-main</span>: <span class="code-str">#0f172a</span>;<br>
+            &nbsp;&nbsp;<span class="code-attr">--primary</span>: <span class="code-str">#6366f1</span>;<br>
+            }<br><br>
+            <span class="code-kw">.projects-grid</span> {<br>
+            &nbsp;&nbsp;<span class="code-attr">display</span>: grid;<br>
+            &nbsp;&nbsp;<span class="code-attr">grid-template-columns</span>: <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;repeat(auto-fit, minmax(280px, 1fr));<br>
+            &nbsp;&nbsp;<span class="code-attr">gap</span>: <span class="code-str">1.5rem</span>;<br>
+            }
+          </div>
+          <div>
+            <ul class="bullet-list">
+              <li>
+                <div class="bullet-icon">🎨</div> <strong>CSS Variables:</strong> Manage colors globally.
+              </li>
+              <li>
+                <div class="bullet-icon">📐</div> <strong>Flexbox:</strong> For navbar & hero alignment.
+              </li>
+              <li>
+                <div class="bullet-icon">📱</div> <strong>CSS Grid Auto-Fit:</strong> Instant responsiveness without
+                complex media query bloat!
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Slide 6 / 11</span>
+        <span>Clean CSS design systems</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 7: LIVE CODE & SITE DEMO -->
+    <section class="slide">
+      <div>
+        <span class="slide-badge">Module 6: Live Demo</span>
+        <h2 class="slide-title">Live Portfolio <span class="gradient-text">Code Walkthrough</span></h2>
+      </div>
+      <div class="slide-body">
+        <div class="card" style="text-align: center; padding: 3rem;">
+          <h3 style="font-size: 1.8rem; margin-bottom: 1rem;">🌐 Open index.html Live</h3>
+          <p style="font-size: 1.1rem; max-width: 600px; margin: 0 auto 2rem;">
+            Switch to the browser window or IDE to demonstrate live editing, responsiveness, and component structure!
+          </p>
+          <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+            <span class="slide-badge" style="background-color: var(--primary); color: #fff;">1. Inspect Nav &
+              Hero</span>
+            <span class="slide-badge" style="background-color: var(--primary); color: #fff;">2. Show Project Grid</span>
+            <span class="slide-badge" style="background-color: var(--primary); color: #fff;">3. Certificates
+              Showcase</span>
+            <span class="slide-badge" style="background-color: var(--primary); color: #fff;">4. Test Mobile View</span>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Slide 7 / 11</span>
+        <span>Interactive Live Demonstration</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 8: COMMON BEGINNER MISTAKES -->
+    <section class="slide">
+      <div>
+        <span class="slide-badge">Module 7: Pitfalls</span>
+        <h2 class="slide-title">Mistakes to <span class="gradient-text">Avoid</span></h2>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card" style="border-color: rgba(239, 68, 68, 0.4);">
+            <h3 style="color: #f87171;">❌ Common Mistakes</h3>
+            <ul class="bullet-list" style="margin-top: 1rem;">
+              <li>Overcomplicating tech stack early.</li>
+              <li>Missing or broken live demo links.</li>
+              <li>Low-contrast text & unreadable fonts.</li>
+              <li>Vague bio descriptions.</li>
+            </ul>
+          </div>
+          <div class="card" style="border-color: rgba(52, 211, 153, 0.4);">
+            <h3 style="color: #34d399;">✅ Best Practices</h3>
+            <ul class="bullet-list" style="margin-top: 1rem;">
+              <li>Keep it clean & readable.</li>
+              <li>Test on mobile devices.</li>
+              <li>Include direct GitHub source code.</li>
+              <li>Make contact options 1-click away.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Slide 8 / 11</span>
+        <span>Build with clarity</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 9: FREE HOSTING -->
+    <section class="slide">
+      <div>
+        <span class="slide-badge">Module 8: Deployment</span>
+        <h2 class="slide-title">Free Hosting & <span class="gradient-text">Deployment</span></h2>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="card">
+            <h3>🐙 GitHub Pages</h3>
+            <p>Push code to a GitHub repository and enable Pages in settings for a free <code>.github.io</code> site.
+            </p>
+          </div>
+          <div class="card">
+            <h3>▲ Vercel / Netlify</h3>
+            <p>Connect your Git repo or drag-and-drop your project folder for instant global CDN deployment & SSL.</p>
+          </div>
+          <div class="card">
+            <h3>🌐 Custom Domain</h3>
+            <p>Optional: Purchase a custom domain (e.g. <code>.dev</code> or <code>.com</code>) to personalize your URL.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Slide 9 / 11</span>
+        <span>Deploy your portfolio at zero cost</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 10: MAINTENANCE & CONTINUOUS UPDATES -->
+    <section class="slide">
+      <div>
+        <span class="slide-badge">Module 9: Maintenance</span>
+        <h2 class="slide-title">Maintenance & <span class="gradient-text">Continuous Updates</span></h2>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="card">
+            <h3>🔄 Keep Dependencies & Links Fresh</h3>
+            <p>Portfolios shouldn't be static. Periodically audit live URLs, fix broken links, and update package dependencies to ensure your demos remain fast, functional, and secure.</p>
+          </div>
+          <div class="card">
+            <h3>🗑️ Regularly Prune Outdated Work</h3>
+            <p>Your portfolio should reflect your current best. Retire beginner tutorial clones as you build more complex applications—curate 2 to 4 top-tier projects that you are proud to explain.</p>
+          </div>
+          <div class="card">
+            <h3>📈 Update Skills, Roles & Badges</h3>
+            <p>Keep your bio, technical tags, and credentials current over time. As you learn new libraries, transition roles, or earn certifications, make sure your portfolio reflects where you are today.</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Slide 10 / 11</span>
+        <span>Portfolios are living products, not static archives</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 11: CONCLUSION & Q&A -->
+    <section class="slide">
+      <div class="slide-body slide-title-hero">
+        <span class="slide-badge">Module 10: Wrap-Up</span>
+        <h1>Thank You! <span class="gradient-text">Questions?</span></h1>
+        <p>Start small, ship clean code, and keep updating your portfolio as you learn!</p>
+        <div style="margin-top: 1.5rem; display: flex; gap: 1rem; justify-content: center;">
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Slide 11 / 11</span>
+        <span>Ready for Audience Q&A</span>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- SPEAKER NOTES FOOTER -->
+  <footer class="notes-panel">
+    <span class="notes-label">Note</span>
+    <span id="speakerNoteText">Welcome your audience, introduce yourself, and state the objective of today's
+      presentation.</span>
+  </footer>
+
+  <!-- PRESENTATION JAVASCRIPT LOGIC -->
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const slideNum = document.getElementById('slideNum');
+    const progressBar = document.getElementById('progressBar');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+    const speakerNoteText = document.getElementById('speakerNoteText');
+
+    const speakerNotes = [
+      "Welcome your audience, introduce yourself, and state the main goal: building a simple, high-impact developer portfolio.",
+      "Highlight the 4 key advantages: proving competence over claims, demonstrating problem-solving process, establishing personal brand, and gaining career leverage.",
+      "Explain the 5 main sections (Hero, About & Skills, Projects, Certificates, Contact). Highlight how certificates provide verified proof of learning alongside hands-on projects.",
+      "Explain why 2 well-made, documented projects are better than 10 unfinished or cloned tutorial projects.",
+      "Walk through semantic HTML tags. Mention how tags like <header>, <section>, and <article> make code easy to read and SEO friendly.",
+      "Point out CSS Variables and CSS Grid auto-fit rule. Highlight how grid-template-columns auto-fits cards without bloated media queries.",
+      "Switch screen to live index.html to demonstrate live editing, responsiveness, and component layout.",
+      "Discuss common pitfalls like missing live demo links or overcomplicating tech stacks. Focus on clean fundamentals.",
+      "Explain free hosting platforms: GitHub Pages, Vercel, and Netlify. Point out that host costs are $0 for static HTML/CSS.",
+      "Emphasize that portfolios are living products. Remind developers to regularly prune old projects, test live links, and keep skills and credentials updated.",
+      "Conclude with key takeaways and invite audience questions. Share your contact links and repository for them to fork!"
+    ];
+
+    let currentSlide = 0;
+
+    function updateSlide(index) {
+      if (index < 0) index = 0;
+      if (index >= slides.length) index = slides.length - 1;
+
+      slides.forEach((slide, i) => {
+        slide.classList.toggle('active', i === index);
+      });
+
+      currentSlide = index;
+      slideNum.textContent = `Slide ${currentSlide + 1} / ${slides.length}`;
+      progressBar.style.width = `${((currentSlide + 1) / slides.length) * 100}%`;
+      speakerNoteText.textContent = speakerNotes[currentSlide] || "";
+    }
+
+    prevBtn.addEventListener('click', () => updateSlide(currentSlide - 1));
+    nextBtn.addEventListener('click', () => updateSlide(currentSlide + 1));
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') {
+        updateSlide(currentSlide + 1);
+      } else if (e.key === 'ArrowLeft') {
+        updateSlide(currentSlide - 1);
+      }
+    });
+
+    fullscreenBtn.addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    });
+
+    updateSlide(0);
+  </script>
+</body>
+
+</html>
